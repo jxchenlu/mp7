@@ -14,9 +14,9 @@ public class Game {
     	if (a < 60) {
     		return new Monster("Slime",300,40,10,5); //create monster Slime
     	} else if (a < 90) {
-    		return new Monster("Ghoul",500,80,20,5); //create monster Ghoul
+    		return new Monster("Ghoul",500,80,20,10); //create monster Ghoul
     	} else {
-    		return new Monster("Chimera",1000,120,40,5); //create monster Chimera
+    		return new Monster("Chimera",1000,120,40,25); //create monster Chimera
     	}
   
     	
@@ -79,8 +79,15 @@ public class Game {
 						s1 = sc2.nextInt() - 1;
 					}
 				}
-				damage = b.attack + Math.max(b.intelligence, b.strength) * b.luck + b.skills[s1].attack - a.defence;
-				if (damage < 0) {
+				if (b.mp - b.skills[s1].consume >= 0) {
+					damage = b.attack + Math.max(b.intelligence, b.strength) * b.luck + b.skills[s1].attack - a.defence;
+					b.mp -= b.skills[s1].consume;
+				} else {
+					System.out.println("You don't have enough mp");
+					damage = b.attack + Math.max(b.intelligence, b.strength) * b.luck - a.defence;
+					
+				}
+				if (damage <= 0) {
 					damage = 1;
 				}
 				System.out.println("You hits " + damage + " damage!");
@@ -91,11 +98,15 @@ public class Game {
 				damageM = 1;
 			}
 			System.out.println(a.name + " hits " + damageM + " damage!");
-			b.bhp = b.bhp - (a.attack - b.defence);
+			b.hp = b.hp - (a.attack - b.defence);
 			if (a.hp <= 0) {
 				System.out.println("You beat " + a.name + "!");
-				b.currentExp +=5;
-				b.levelUp();
+				b.currentExp += a.exp;
+				boolean levelUP = b.levelUp();
+				if (levelUP) {
+					System.out.println("Level Up!");
+				}
+			
 				if(d20.roll() + b.luck >= 20) {
 					equipment a1 = new equipment(6);
 					int roll = d20.roll();
@@ -127,7 +138,7 @@ public class Game {
 				}
 				return true;
 			}
-			if (b.bhp <= 0) {
+			if (b.hp <= 0) {
 				System.out.println("You are beaten!");
 				return false;
 			}
@@ -196,7 +207,7 @@ public class Game {
 			Monster mon1 = monsterCreator();
 			Monster mon2 = monsterCreator();
 			System.out.println("Today is Day " + day);
-			System.out.println("Your HP is " + newPlayer.bhp +"  " +  "Your MP is " + newPlayer.bmp);
+			System.out.println("Your HP is " + newPlayer.hp +"  " +  "Your MP is " + newPlayer.mp);
 			System.out.println("What do you want to do?");
 			System.out.println("1. battle  2. train  3. rest");
 			int a1 = sc.nextInt();
@@ -217,9 +228,9 @@ public class Game {
 					if (aq == 2) {
 					      boolean n1d = battle(mon2, newPlayer); 
 					}
-					if (newPlayer.bhp < 0) {
+					if (newPlayer.hp < 0) {
 						System.out.println("You fail!");
-						newPlayer.bhp = 1;
+						newPlayer.hp = 1;
 					
 					}
 				}
@@ -228,19 +239,19 @@ public class Game {
 				scount += 1;
 				if (newPlayer.job == "wizard") {
 					if (scount == 2) {
-						newPlayer.skills[1] = new Skill("Hell Fire",40,10);
+						newPlayer.skills[1] = new Skill("Hell Fire",40,20);
 						System.out.println("You get the level 2 skill: " + newPlayer.skills[1].name + "!");
 					} else if (scount == 4) {
-						newPlayer.skills[2] = new Skill("Thunderstorm!",100,10);
+						newPlayer.skills[2] = new Skill("Thunderstorm!",100,30);
 						System.out.println("You get the level 3 skill:" + newPlayer.skills[2].name + "!");
 						System.out.println("You cannot learn more skills!");
 					}
 				} else {
 					if (scount == 2) {
-						newPlayer.skills[1] = new Skill("Belly Rake",40,10);
+						newPlayer.skills[1] = new Skill("Belly Rake",40,20);
 						System.out.println("You get the level 2 skill: " + newPlayer.skills[1].name + "!");
 					} else if (scount == 4) {
-						newPlayer.skills[2] = new Skill("Killing Bite",100,10);
+						newPlayer.skills[2] = new Skill("Killing Bite",100,30);
 						System.out.println("You get the skill " + newPlayer.skills[2].name + "!");
 						System.out.println("You cannot learn more skills!");
 					}
@@ -257,6 +268,10 @@ public class Game {
 				}
 				equipment ring = new equipment(6);
 				ring.equip(newPlayer);
+			}
+			
+			if(newPlayer.hp < 0) {
+				newPlayer.hp = 1;
 			}
 
 			System.out.println();
