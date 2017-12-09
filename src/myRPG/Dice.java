@@ -5,7 +5,6 @@ public class Dice {
 
     /** Private random number generator. */
     Random myRand;
-
     /** Number of sides for this dice. */
     int numSides;
 

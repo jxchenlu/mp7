@@ -12,11 +12,11 @@ public class Game {
     	Dice d100 = new Dice(100);
     	int a = d100.roll();
     	if (a < 60) {
-    		return new Monster("Slime",300,40,10,5); //怪物hp，atk，def，经验 调整一下
+    		return new Monster("Slime",300,40,10,5); //create monster Slime
     	} else if (a < 90) {
-    		return new Monster("Ghoul",500,80,20,5); //怪物hp，atk，def，经验 调整一下
+    		return new Monster("Ghoul",500,80,20,5); //create monster Ghoul
     	} else {
-    		return new Monster("Chimera",1000,120,40,5); //怪物hp，atk，def，经验 调整一下
+    		return new Monster("Chimera",1000,120,40,5); //create monster Chimera
     	}
   
     	
@@ -141,25 +141,38 @@ public class Game {
 
 	}
 
+	
+	//This is the main game mode code
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		System.out.println("You have ten days to beat the boss!");
+		System.out.println("This, is a dangerous world.");
+		System.out.println("People used to live peacefully with Earth creatures.");
+		System.out.println(" But one day, a gigantic meteorite filled with seeds of creatures from the universe fell on the Earth, bringing the Earth a huge catastrophy.");
+		System.out.println("Various monsters eat and kill animals and creatures, destroying people's family and home. Poeple live ");
+		System.out.println("desperately, wishing one day a hero can save their lives and bring them the peace.");
+		System.out.println();
+		System.out.println("You are the chosen one. You were born for fighting them to death. That's your destiny, and also the path you chose for yourself." );
+		System.out.println("Recently you just find that all monsters have a weird relationships with their leader: Fire Dragon. An elder");
+		System.out.println("told you, if you can kill you that beast, all other monsters will die.");
+		System.out.println("You have decided, to bring the Earth peace. Now, the chosen one, it's time to fight!");
+		System.out.println("You have 10 days to kill it!");
 		System.out.println("Player enter your name:");
 		String name = sc.nextLine();
-		System.out.println("Do you wnat to be a warrior or a wizard?");
-		System.out.println("Enter 1 for warrior or 2 for wizard：");
+		System.out.println(name + ", do you want to be a warrior or a wizard?");
+		System.out.println("Enter 1 for warrior or 2 for wizard");
 		int a = sc.nextInt();
 		while (a > 2 || a < 1) {
-			System.out.println("Enter 1 for warrior or 2 for wizard：");
+			System.out.println("You typed wrong. Please enter 1 for warrior or 2 for wizard");
 			a = sc.nextInt();
 		}
 		Player newPlayer = new Player(a);
-		System.out.println("This is you！");
+		System.out.println(name + ", this is you!");
 		System.out.println("HP = " + newPlayer.hp + "  " + "MP = " + newPlayer.mp + "  " 
 				+ "STR = " + newPlayer.strength  + "  " + "INT = " + newPlayer.intelligence);
 		System.out.println("ATK = " + newPlayer.attack  + "  " + "DEF = " + newPlayer.defence + "  " 
 				+ "LUCK = " + newPlayer.luck );
 		
+		System.out.println();
 		System.out.println("Begin your adventure!");
 		System.out.println();
 		try {
@@ -172,6 +185,7 @@ public class Game {
 		int scount = 0;
 
 		int day = 1;
+		//System.out.println("Today is the first day. DAY 1");
 		for (day = 1; day <= 8; day++) {
 			try {
 				Thread.sleep(1000);
@@ -181,7 +195,7 @@ public class Game {
 			}
 			Monster mon1 = monsterCreator();
 			Monster mon2 = monsterCreator();
-			System.out.println("Day " + day);
+			System.out.println("Today is Day " + day);
 			System.out.println("Your HP is " + newPlayer.bhp +"  " +  "Your MP is " + newPlayer.bmp);
 			System.out.println("What do you want to do?");
 			System.out.println("1. battle  2. train  3. rest");
@@ -196,7 +210,7 @@ public class Game {
 					System.out.println("Do you want to go home?");
 					System.out.println("1. yes   2. no ");
 					int aq = sc.nextInt();
-					while (aq > 2 || aq < 1) {
+					while (aq >2 || aq < 1) {
 						System.out.println("Enter again");
 						aq = sc.nextInt();
 					}
@@ -204,7 +218,9 @@ public class Game {
 					      boolean n1d = battle(mon2, newPlayer); 
 					}
 					if (newPlayer.bhp < 0) {
-						newPlayer.bhp = 0;
+						System.out.println("You fail!");
+						newPlayer.bhp = 1;
+					
 					}
 				}
 			} else if (a1 == 2) {
@@ -212,26 +228,27 @@ public class Game {
 				scount += 1;
 				if (newPlayer.job == "wizard") {
 					if (scount == 2) {
-						newPlayer.skills[1] = new Skill("法师招式二",40,10);
-						System.out.println("You get the skill " + newPlayer.skills[1].name);
+						newPlayer.skills[1] = new Skill("Hell Fire",40,10);
+						System.out.println("You get the level 2 skill: " + newPlayer.skills[1].name + "!");
 					} else if (scount == 4) {
-						newPlayer.skills[2] = new Skill("法师招式三",60,10);
-						System.out.println("You get the skill " + newPlayer.skills[2].name);
+						newPlayer.skills[2] = new Skill("Thunderstorm!",100,10);
+						System.out.println("You get the level 3 skill:" + newPlayer.skills[2].name + "!");
 						System.out.println("You cannot learn more skills!");
 					}
 				} else {
 					if (scount == 2) {
-						newPlayer.skills[1] = new Skill("战士招式二",40,10);
-						System.out.println("You get the skill " + newPlayer.skills[1].name);
+						newPlayer.skills[1] = new Skill("Belly Rake",40,10);
+						System.out.println("You get the level 2 skill: " + newPlayer.skills[1].name + "!");
 					} else if (scount == 4) {
-						newPlayer.skills[2] = new Skill("战士招式三",60,10);
-						System.out.println("You get the skill " + newPlayer.skills[2].name);
+						newPlayer.skills[2] = new Skill("Killing Bite",100,10);
+						System.out.println("You get the skill " + newPlayer.skills[2].name + "!");
 						System.out.println("You cannot learn more skills!");
 					}
 				}
 				
 			} else {
 				System.out.println("You take a rest and recover to the best condition");
+				newPlayer.levelUp();
 				newPlayer.hp = newPlayer.bhp;
 				newPlayer.mp = newPlayer.bmp;
 				Dice d100 = new Dice(100);
@@ -254,7 +271,8 @@ public class Game {
 		}
 		
 		day = 9;
-		System.out.println("休息一天，明天打怪"); // 加点剧情？？？？
+		System.out.println("Maybe take one day off?"); 
+		newPlayer.levelUp();
 		newPlayer.hp = newPlayer.bhp;
 		newPlayer.mp = newPlayer.bmp;
 		try {
@@ -263,12 +281,14 @@ public class Game {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		Monster boss = new Monster("Dragon", 2, 200, 50, 0);
+		Monster boss = new Monster("Fire Dragon", 1500, 200, 50, 0);
 		boolean nd = battle(boss, newPlayer); 
 		if(boss.hp <= 0) {
-			System.out.println("胜利剧情");
+			System.out.println("We are so proud of you! You are the only one defeating the most dangerous monster all over the world! "
+					+ "Because of you, we humanbeing finally can live in a safe and peacful world! You bring us the peace!");
 		} else {
-			System.out.println("失败剧情");
+			System.out.println("We are sorry for you, you get the fatal attack from the Fire Dragon. "
+					+ "You are the only hope for us people, please choose to be reborn and save us again! ");
 		}
 		
 
